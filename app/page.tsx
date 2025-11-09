@@ -11,6 +11,7 @@ import { BarChart } from "@mui/icons-material";
 import GppGoodIcon from "@mui/icons-material/GppGood";
 import BoltIcon from "@mui/icons-material/Bolt";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import StepCard from "@/components/landing/StepCard";
 export default function Home() {
   // Mock data for featured books
   // TODO: Replace with real data from backend
@@ -116,6 +117,25 @@ export default function Home() {
       description: "Modern digital library system for the 21st century",
     },
   ];
+
+  const steps = [
+    {
+      step: 1,
+      stepName: "Create Account",
+      stepDetails:
+        "Sign up with your email to get instant access to our library",
+    },
+    {
+      step: 2,
+      stepName: "Browse Books",
+      stepDetails: "Search through thousands of books and find your next read",
+    },
+    {
+      step: 3,
+      stepName: "Start Reading",
+      stepDetails: "Borrow books instantly and manage your reading journey",
+    },
+  ];
   return (
     <>
       <PublicHeader />
@@ -161,6 +181,24 @@ export default function Home() {
               icon={feature.icon}
               title={feature.title}
               description={feature.description}
+            />
+          ))}
+        </div>
+      </FeatureLayout>
+
+      {/* How It Works */}
+      <FeatureLayout background="bg-white">
+        <FeatureTitle
+          title="How It Works"
+          subtitle="Get started in three simple steps"
+        />
+        <div className="flex justify-between">
+          {steps.map((step) => (
+            <StepCard
+              key={step.id}
+              step={step.step}
+              stepName={step.stepName}
+              stepDetails={step.stepDetails}
             />
           ))}
         </div>
