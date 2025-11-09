@@ -1,6 +1,6 @@
 const PublicHeader = () => {
   return (
-    <header className="flex h-16 items-center justify-between border-gray-200 px-40">
+    <header className="fixed top-0 right-0 left-0 z-50 flex h-16 items-center justify-between border-gray-200 bg-white px-40">
       <div>
         <p className="text-primary cursor-pointer text-4xl font-bold">EzLib</p>
       </div>

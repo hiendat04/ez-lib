@@ -1,7 +1,16 @@
 import BookCard from "@/components/BookCard";
+import FeatureLayout from "@/components/landing/FeatureLayout";
+import FeatureSectionCard from "@/components/landing/FeatureSectionCard";
+import FeatureTitle from "@/components/landing/FeatureTitle";
 import HeroSection from "@/components/landing/HeroSection";
 import PublicHeader from "@/components/landing/PublicHeader";
 import StatSection from "@/components/landing/StatSection";
+import ImportContactsTwoToneIcon from "@mui/icons-material/ImportContactsTwoTone";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { BarChart } from "@mui/icons-material";
+import GppGoodIcon from "@mui/icons-material/GppGood";
+import BoltIcon from "@mui/icons-material/Bolt";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 export default function Home() {
   // Mock data for featured books
   // TODO: Replace with real data from backend
@@ -71,19 +80,54 @@ export default function Home() {
       coverImageUrl: "/landing/dummy-book-cover.jpg",
     },
   ];
+
+  const features = [
+    {
+      icon: ImportContactsTwoToneIcon,
+      title: "Extensive Collection",
+      description:
+        "Access thousands of books across multiple categories and genres",
+    },
+    {
+      icon: AccessTimeIcon,
+      title: "Easy Borrowing",
+      description:
+        "Borrow books with a click and manage your loans effortlessly",
+    },
+    {
+      icon: BarChart,
+      title: "Track Your Reading",
+      description: "Monitor your reading history and borrowing trends",
+    },
+    {
+      icon: GppGoodIcon,
+      title: "Secure & Reliable",
+      description:
+        "Your data is safe with our secure library management system",
+    },
+    {
+      icon: BoltIcon,
+      title: "Fast & Efficient",
+      description: "Find and reserve books quickly with our intuitive search",
+    },
+    {
+      icon: LibraryBooksIcon,
+      title: "Digital Management",
+      description: "Modern digital library system for the 21st century",
+    },
+  ];
   return (
     <>
       <PublicHeader />
       <HeroSection />
       <StatSection />
+
       {/* Feature Books */}
-      <div className="container mx-auto space-y-6 px-8 pt-16">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold text-black">Feature Books</h2>
-          <p className="text-primary-light mt-6">
-            Discover some of our most popular titles
-          </p>
-        </div>
+      <FeatureLayout background="bg-white">
+        <FeatureTitle
+          title="Feature Books"
+          subtitle="Discover some of our most popular titles"
+        />
         <div className="grid grid-cols-4">
           {books.map((book) => (
             <BookCard
@@ -102,7 +146,25 @@ export default function Home() {
             Browse All Books
           </button>
         </div>
-      </div>
+      </FeatureLayout>
+
+      {/* Feature Sections */}
+      <FeatureLayout background="fe">
+        <FeatureTitle
+          title="Everything You Need"
+          subtitle="Our comprehensive library management system provides all the tools you need for a seamless reading experience"
+        />
+        <div className="mx-auto mt-10 grid max-w-7xl grid-cols-3 grid-rows-2 gap-10">
+          {features.map((feature, index) => (
+            <FeatureSectionCard
+              key={index}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
+        </div>
+      </FeatureLayout>
     </>
   );
 }
