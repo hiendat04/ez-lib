@@ -1,11 +1,24 @@
 import { FeatureTitleProps } from "@/types/FeatureTitleProps";
 
-const FeatureTitle = ({ title, subtitle }: FeatureTitleProps) => {
+const FeatureTitle = ({
+  title,
+  subtitle,
+  titleColor,
+  subtitleColor,
+}: FeatureTitleProps) => {
   return (
     <div className="text-center">
-      <h2 className="text-4xl font-bold text-black">{title}</h2>
+      <h2
+        className={`text-4xl ${titleColor ? titleColor : "text-black"} font-bold`}
+      >
+        {title}
+      </h2>
       <div className="mx-auto max-w-xl">
-        <p className="text-primary-light mt-6 text-[18px]">{subtitle}</p>
+        <p
+          className={` ${subtitleColor ? subtitleColor : "text-primary-light"} mt-6 text-[18px]`}
+        >
+          {subtitle}
+        </p>
       </div>
     </div>
   );

@@ -195,13 +195,28 @@ export default function Home() {
         <div className="flex justify-between">
           {steps.map((step) => (
             <StepCard
-              key={step.id}
+              key={step.step}
               step={step.step}
               stepName={step.stepName}
               stepDetails={step.stepDetails}
             />
           ))}
         </div>
+      </FeatureLayout>
+
+      {/* Ready To Start Your Journey */}
+      <FeatureLayout background="bg-gradient-to-r from-primary to-secondary">
+        <FeatureTitle
+          titleColor="text-white"
+          subtitleColor="text-white"
+          title="Ready to Start Your Reading Journey?"
+          subtitle="Join our community of book lovers today and unlock unlimited access to knowledge"
+        />
+          <div className="mt-8 text-center">
+            <button className="bg-accent cursor-pointer rounded-md px-6 py-3 font-medium text-black transition hover:shadow-lg">
+              Get Started Now
+            </button>
+          </div>
       </FeatureLayout>
     </>
   );
