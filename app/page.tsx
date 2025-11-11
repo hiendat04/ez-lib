@@ -12,6 +12,7 @@ import GppGoodIcon from "@mui/icons-material/GppGood";
 import BoltIcon from "@mui/icons-material/Bolt";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import StepCard from "@/components/landing/StepCard";
+import Footer from "@/components/landing/Footer";
 export default function Home() {
   // Mock data for featured books
   // TODO: Replace with real data from backend
@@ -218,6 +219,7 @@ export default function Home() {
             </button>
           </div>
       </FeatureLayout>
+      <Footer />
     </>
   );
 }
