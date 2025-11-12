@@ -1,5 +1,18 @@
-// ...existing code...
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+const footerLinks = [
+  {
+    title: "Quick Links",
+    links: ["About Us", "Collections", "Services"],
+  },
+  {
+    title: "Support",
+    links: ["Help Center", "Contact", "FAQs"],
+  },
+  {
+    title: "Legal",
+    links: ["Privacy Policy", "Term of Service", "Cookie Policy"],
+  },
+];
 const Footer = () => {
   return (
     <footer className="bg-foreground mx-auto flex items-start justify-center gap-10 px-8 py-12">
@@ -13,33 +26,20 @@ const Footer = () => {
         </p>
       </div>
       <div className="flex items-start justify-between gap-60">
-        <div>
-          <p className="text-white">Quick Links</p>
-          <div className="text-primary-light mt-4 flex flex-col gap-2">
-            <p className="hover:text-accent">About Us</p>
-            <p className="hover:text-accent">Collections</p>
-            <p className="hover:text-accent">Services</p>
+        {footerLinks.map((section) => (
+          <div key={section.title}>
+            <p className="text-white">{section.title}</p>
+            <div className="text-primary-light mt-4 flex flex-col gap-2">
+              {section.links.map((link) => (
+                <p key={link} className="hover:text-accent">
+                  {link}
+                </p>
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <p className="text-white">Support</p>
-          <div className="text-primary-light mt-4 flex flex-col gap-2">
-            <p className="hover:text-accent">Help Center</p>
-            <p className="hover:text-accent">Contact</p>
-            <p className="hover:text-accent">FAQs</p>
-          </div>
-        </div>
-        <div>
-          <p className="text-white">Legal</p>
-          <div className="text-primary-light mt-4 flex flex-col gap-2">
-            <p className="hover:text-accent">Privacy Policy</p>
-            <p className="hover:text-accent">Term of Service</p>
-            <p className="hover:text-accent">Cookie Policy</p>
-          </div>
-        </div>
+        ))}
       </div>
     </footer>
   );
 };
 export default Footer;
-// ...existing code...
