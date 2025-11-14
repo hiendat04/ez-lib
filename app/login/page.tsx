@@ -3,18 +3,57 @@ import Link from "next/link";
 import LoginLayout from "./layout";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { useState } from "react";
-import InputField from "@/components/form/Input";
 import PublicHeader from "@/components/landing/PublicHeader";
 import Input from "@/components/form/Input";
+import Loading from "@/components/Loading";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Create API to login
-    console.log({ email, password });
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Store user data in localStorage or context
+        localStorage.setItem("user", JSON.stringify(data.user));
+        // Redirect to dashboard or home page
+        window.location.href = "/dashboard";
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      setError(`Network error occurred. Please try again. Details: ${error}`);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading)
+    return (
+      <>
+        <PublicHeader />
+        <LoginLayout>
+          <Loading text="Logging in ..." />
+        </LoginLayout>
+      </>
+    );
+
   return (
     <>
       <PublicHeader />
@@ -29,6 +68,11 @@ const LoginPage = () => {
             <p className="text-primary-light">Sign in To Your Account</p>
           </div>
           <form className="mt-10" onSubmit={handleSubmit}>
+            {error && (
+              <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
             <label htmlFor="email">Email</label>
             <Input
               label="email"
