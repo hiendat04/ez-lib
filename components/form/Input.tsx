@@ -1,15 +1,5 @@
+import { InputProps } from "@/types/books";
 import React from "react";
-
-interface InputProps {
-  label: string;
-  id: string;
-  type?: string;
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
-  className?: string;
-  required?: boolean;
-}
 
 const Input: React.FC<InputProps> = ({
   id,

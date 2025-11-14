@@ -1,139 +1,138 @@
 "use client";
 import BookCard from "@/components/BookCard";
 import Input from "@/components/form/Input";
-import InputField from "@/components/form/Input";
 import FeatureLayout from "@/components/landing/FeatureLayout";
 import FeatureTitle from "@/components/landing/FeatureTitle";
 import PublicHeader from "@/components/landing/PublicHeader";
+import Loading from "@/components/Loading";
+import { Author } from "@/types/books";
+import { Book } from "@prisma/client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const BrowseBooksPage = () => {
-  const [search, setSearch] = useState("");
-  const books = [
-    {
-      id: "1",
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      totalCopies: 10,
-      availableCopies: 4,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "2",
-      title: "To Kill a Mockingbird",
-      author: "Harper Lee",
-      totalCopies: 8,
-      availableCopies: 2,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "3",
-      title: "1984",
-      author: "George Orwell",
-      totalCopies: 5,
-      availableCopies: 3,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "4",
-      title: "Pride and Prejudice",
-      author: "Jane Austen",
-      totalCopies: 12,
-      availableCopies: 6,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "5",
-      title: "The Catcher in the Rye",
-      author: "J.D. Salinger",
-      totalCopies: 7,
-      availableCopies: 3,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "6",
-      title: "Brave New World",
-      author: "Aldous Huxley",
-      totalCopies: 9,
-      availableCopies: 4,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "7",
-      title: "One Hundred Years of Solitude",
-      author: "Gabriel García Márquez",
-      totalCopies: 11,
-      availableCopies: 6,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "8",
-      title: "Lord of the Flies",
-      author: "William Golding",
-      totalCopies: 6,
-      availableCopies: 2,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-  ];
+  const [searchValue, setSearchValue] = useState("");
+  const [books, setBooks] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 0,
+    totalBooks: 0,
+    limit: 10,
+  });
 
-  const bookCategory = [
-    "Fiction",
-    "Non-Fiction",
-    "Science",
-    "History",
-    "Biography",
-  ];
+  const fetchBooks = async (page = 1, limit = 8) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/books?page=${page}&limit=${limit}`);
+      const data = await response.json();
 
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    // TODO: Implement search functionality
+      if (data.success) {
+        setBooks(data.books);
+        setPagination(data.pagination);
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      setError("Failed to fetch books");
+      console.error("Fetch books error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`/api/books/categories`);
+      const data = await response.json();
+
+      if (data.success) {
+        // Handle categories if needed
+        setCategories(data.categories);
+      } else {
+        console.error("Failed to fetch categories:", data.message);
+      }
+    } catch (error) {
+      console.error("Fetch categories error:", error);
+    }
+  };
+
+  // Call the API when component mounts
+  useEffect(() => {
+    fetchBooks();
+    fetchCategories();
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <PublicHeader />
+        <div className="mt-32 text-center">
+          <Loading text="Loading Books ..." />
+        </div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <PublicHeader />
+        <div className="mt-32 text-center text-red-500">{error}</div>
+      </>
+    );
+  }
+
+  console.log({ categories, searchValue });
+
   return (
     <>
       <PublicHeader />
       <div className="flex flex-col items-center justify-center gap-5">
         <h2 className="mt-32 text-3xl font-semibold">Explore Our Collection</h2>
         <p className="text-primary-light text-center text-xl">
-          Browse through hundreds of books across various categories. <br />
+          Browse through {pagination.totalBooks} books across various
+          categories. <br />
           Sign up to start borrowing!
         </p>
       </div>
-      {/* Search by title or author and Select drop down category */}
-      <div className="mt-10 flex w-full items-center justify-center gap-4">
+
+      <div className="mx-auto mt-10 flex w-full max-w-4xl items-center justify-center gap-4">
         <Input
-          value={search}
           label="search"
           id="search"
           placeholder="Search by title or author"
-          className="max-w-xl"
-          onChange={(value) => handleSearchChange(value)}
+          value={searchValue}
+          onChange={setSearchValue}
+          className="max-w-md flex-1"
         />
-        <select className="focus:border-primary w-1/9 rounded-md border border-gray-300 px-4 py-2 focus:outline-none">
+        <select className="focus:ring-primary mt-2 mb-4 max-w-[12] cursor-pointer rounded-md border border-gray-300 p-2 focus:ring-2 focus:outline-none">
           <option value="">All Categories</option>
-          {bookCategory.map((category) => (
-            <option key={category} value={category}>
+          {categories.map((category: string) => (
+            <option key={category} value={category} className="cursor-pointer">
               {category}
             </option>
           ))}
         </select>
       </div>
-      <div className="mx-auto mb-20 max-w-7xl">
-        <div className="mt-20 grid grid-cols-4 gap-6">
-          {books.map((book) => (
+
+      <div className="mx-auto max-w-7xl px-8">
+        <div className="mt-20 grid grid-cols-4">
+          {books.map((book: Book & { author: Author }) => (
             <BookCard
               key={book.id}
               id={book.id}
               title={book.title}
-              author={book.author}
+              author={book.author?.name}
               totalCopies={book.totalCopies}
               availableCopies={book.availableCopies}
-              coverImageUrl={book.coverImageUrl}
+              coverImageUrl={book.imageUrl ?? "/landing/dummy-book-cover.jpg"}
             />
           ))}
         </div>
       </div>
-      {/* TODO: Pagination */}
       <FeatureLayout background="bg-gradient-to-r from-primary to-secondary">
         <FeatureTitle
           titleColor="text-white"

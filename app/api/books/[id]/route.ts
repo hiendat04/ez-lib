@@ -1,20 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loginUser } from "@/lib/auth";
-import { LoginCredentials } from "@/types/auth";
+import { getBookById } from "@/lib/books";
 
-export async function POST(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
   try {
-    const body: LoginCredentials = await request.json();
-    
-    const result = await loginUser(body);
+    const bookId = params.id;
+
+    const result = await getBookById(bookId);
 
     if (result.success) {
       return NextResponse.json(result, { status: 200 });
     } else {
-      return NextResponse.json(result, { status: 401 });
+      return NextResponse.json(result, { status: 404 });
     }
   } catch (error) {
-    console.error("API Login error:", error);
+    console.error("API Get book by ID error:", error);
     return NextResponse.json(
       {
         success: false,

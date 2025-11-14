@@ -1,14 +1,13 @@
 import Image from "next/image";
 import StatusBadge from "./StatusBadge";
-import { BookCardProps } from "@/types/BookCardProps";
+import { BookCardProps } from "@/types/landing";
 
 const BookCard = ({
-  id,
   title,
   author,
   totalCopies,
   availableCopies,
-  coverImageUrl,
+  coverImageUrl = "/landing/dummy-book-cover.jpg",
 }: BookCardProps) => {
   return (
     <div className="m-4 flex cursor-pointer flex-col gap-4 rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg">
