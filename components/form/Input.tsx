@@ -1,6 +1,6 @@
 import React from "react";
 
-interface InputFieldProps {
+interface InputProps {
   label: string;
   id: string;
   type?: string;
@@ -11,8 +11,7 @@ interface InputFieldProps {
   required?: boolean;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
-  label,
+const Input: React.FC<InputProps> = ({
   id,
   type = "text",
   placeholder,
@@ -25,19 +24,16 @@ const InputField: React.FC<InputFieldProps> = ({
     "focus:ring-primary mt-2 mb-4 w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:outline-none";
 
   return (
-    <div>
-      <label htmlFor={id}>{label}</label>
-      <input
-        type={type}
-        id={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        required={required}
-        className={`${baseClasses} ${className}`}
-      />
-    </div>
+    <input
+      type={type}
+      id={id}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      required={required}
+      className={`${baseClasses} ${className}`}
+    />
   );
 };
 
-export default InputField;
+export default Input;

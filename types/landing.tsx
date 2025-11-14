@@ -27,3 +27,9 @@ export interface StepCardProps {
   stepName: string;
   stepDetails: string;
 }
+
+export interface FooterSectionProps {
+  title: string;
+  
+  links: string[];
+}

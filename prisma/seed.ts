@@ -10,7 +10,6 @@ async function main() {
   console.log("Deleting existing data...");
   await prisma.bookAuthor.deleteMany({});
   await prisma.loan.deleteMany({});
-  await prisma.reservation.deleteMany({});
   await prisma.book.deleteMany({});
   await prisma.author.deleteMany({});
   await prisma.publisher.deleteMany({});

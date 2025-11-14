@@ -13,7 +13,7 @@ const footerLinks = [
     links: ["Privacy Policy", "Term of Service", "Cookie Policy"],
   },
 ];
-const Footer = () => {
+const Footer = ({  }) => {
   return (
     <footer className="bg-foreground mx-auto flex items-start justify-center gap-10 px-8 py-12">
       <div className="mr-12">
@@ -22,7 +22,7 @@ const Footer = () => {
           <p className="font-bold text-white">Library Management</p>
         </div>
         <p className="text-primary-light mt-4 max-w-sm font-medium">
-          Your modern digital library solution for the 21st century
+          {}
         </p>
       </div>
       <div className="flex items-start justify-between gap-60">

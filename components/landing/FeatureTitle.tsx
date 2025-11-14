@@ -1,4 +1,4 @@
-import { FeatureTitleProps } from "@/types/FeatureTitleProps";
+import { FeatureTitleProps } from "@/types/landing";
 
 const FeatureTitle = ({
   title,
@@ -13,7 +13,7 @@ const FeatureTitle = ({
       >
         {title}
       </h2>
-      <div className="mx-auto max-w-xl">
+      <div className="mx-auto max-w-2xl">
         <p
           className={` ${subtitleColor ? subtitleColor : "text-primary-light"} mt-6 text-[18px]`}
         >
