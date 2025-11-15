@@ -1,91 +1,51 @@
-"use client";
 import BookCard from "@/components/BookCard";
-import Input from "@/components/form/Input";
+import Pagination from "@/components/books/Pagination";
+import SearchAndFilter from "@/components/books/SearchAndFilter";
 import FeatureLayout from "@/components/landing/FeatureLayout";
 import FeatureTitle from "@/components/landing/FeatureTitle";
 import PublicHeader from "@/components/landing/PublicHeader";
-import Loading from "@/components/Loading";
-import { Author } from "@/types/books";
-import { Book } from "@prisma/client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 
-const BrowseBooksPage = () => {
-  const [searchValue, setSearchValue] = useState("");
-  const [books, setBooks] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    totalPages: 0,
-    totalBooks: 0,
-    limit: 10,
+import { getAllBooksWithFilters } from "@/lib/books";
+import { Author, Book } from "@/types/books";
+import Link from "next/link";
+
+interface BrowseBooksPageProps {
+  searchParams: {
+    page?: string;
+    limit?: string;
+    search?: string;
+    category?: string;
+  };
+}
+
+const BrowseBooksPage = async ({ searchParams }: BrowseBooksPageProps) => {
+  const params = await searchParams;
+  const page = parseInt(params.page || "1");
+  const limit = parseInt(params.limit || "8");
+  const search = params.search || "";
+  const category = params.category || "";
+
+  // Fetch books with filters
+  const result = await getAllBooksWithFilters({
+    page,
+    limit,
+    search,
+    category,
   });
 
-  const fetchBooks = async (page = 1, limit = 8) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/books?page=${page}&limit=${limit}`);
-      const data = await response.json();
-
-      if (data.success) {
-        setBooks(data.books);
-        setPagination(data.pagination);
-      } else {
-        setError(data.message);
-      }
-    } catch (error) {
-      setError("Failed to fetch books");
-      console.error("Fetch books error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch(`/api/books/categories`);
-      const data = await response.json();
-
-      if (data.success) {
-        // Handle categories if needed
-        setCategories(data.categories);
-      } else {
-        console.error("Failed to fetch categories:", data.message);
-      }
-    } catch (error) {
-      console.error("Fetch categories error:", error);
-    }
-  };
-
-  // Call the API when component mounts
-  useEffect(() => {
-    fetchBooks();
-    fetchCategories();
-  }, []);
-
-  if (loading) {
+  if (!result.success) {
     return (
       <>
         <PublicHeader />
-        <div className="mt-32 text-center">
-          <Loading text="Loading Books ..." />
+        <div className="flex flex-col items-center justify-center gap-5">
+          <h2 className="mt-32 text-3xl font-semibold">Error loading books</h2>
+          <p className="text-red-500">{result.message}</p>
         </div>
       </>
     );
   }
 
-  if (error) {
-    return (
-      <>
-        <PublicHeader />
-        <div className="mt-32 text-center text-red-500">{error}</div>
-      </>
-    );
-  }
-
-  console.log({ categories, searchValue });
+  const { books, pagination } = result;
 
   return (
     <>
@@ -95,44 +55,50 @@ const BrowseBooksPage = () => {
         <p className="text-primary-light text-center text-xl">
           Browse through {pagination.totalBooks} books across various
           categories. <br />
-          Sign up to start borrowing!
+          {search && <span>Search results for: &quot;{search}&quot;</span>}
+          {category && <span>Category: {category}</span>}
         </p>
       </div>
 
-      <div className="mx-auto mt-10 flex w-full max-w-4xl items-center justify-center gap-4">
-        <Input
-          label="search"
-          id="search"
-          placeholder="Search by title or author"
-          value={searchValue}
-          onChange={setSearchValue}
-          className="max-w-md flex-1"
-        />
-        <select className="focus:ring-primary mt-2 mb-4 max-w-[12] cursor-pointer rounded-md border border-gray-300 p-2 focus:ring-2 focus:outline-none">
-          <option value="">All Categories</option>
-          {categories.map((category: string) => (
-            <option key={category} value={category} className="cursor-pointer">
-              {category}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SearchAndFilter />
 
       <div className="mx-auto max-w-7xl px-8">
-        <div className="mt-20 grid grid-cols-4">
-          {books.map((book: Book & { author: Author }) => (
-            <BookCard
-              key={book.id}
-              id={book.id}
-              title={book.title}
-              author={book.author?.name}
-              totalCopies={book.totalCopies}
-              availableCopies={book.availableCopies}
-              coverImageUrl={book.imageUrl ?? "/landing/dummy-book-cover.jpg"}
-            />
-          ))}
-        </div>
+        {books.length > 0 ? (
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {books.map((book: Book) => (
+              <BookCard
+                key={book.id}
+                id={book.id}
+                title={book.title}
+                author={book.authors
+                  .map((author: Author) => author.name)
+                  .join(", ")}
+                totalCopies={book.totalCopies}
+                availableCopies={book.availableCopies}
+                coverImageUrl={
+                  book.coverImageUrl || "/landing/dummy-book-cover.jpg"
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center">
+            <h3 className="text-xl font-semibold text-gray-600">
+              No books found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your search or filter criteria
+            </p>
+          </div>
+        )}
+
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          totalBooks={pagination.totalBooks}
+        />
       </div>
+
       <FeatureLayout background="bg-gradient-to-r from-primary to-secondary">
         <FeatureTitle
           titleColor="text-white"

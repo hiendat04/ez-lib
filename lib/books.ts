@@ -3,26 +3,51 @@ import {
   Book,
   BooksResponse,
   BookResponse,
-  PaginationParams,
   CategoryResponse,
 } from "@/types/books";
 
 const prisma = new PrismaClient();
 
-export async function getAllBooks(
-  params: PaginationParams = {},
-): Promise<BooksResponse> {
+export async function getAllBooksWithFilters(params: {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+}): Promise<BooksResponse> {
   try {
     const page = Math.max(1, params.page || 1);
-    const limit = Math.min(50, Math.max(1, params.limit || 10));
+    const limit = Math.min(50, Math.max(1, params.limit || 8));
     const skip = (page - 1) * limit;
 
+    // Build where clause for filtering
+    const where: any = {};
+
+    if (params.search) {
+      where.OR = [
+        { title: { contains: params.search, mode: "insensitive" } },
+        {
+          bookAuthors: {
+            some: {
+              author: {
+                name: { contains: params.search, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ];
+    }
+
+    if (params.category) {
+      where.category = { equals: params.category, mode: "insensitive" };
+    }
+
     // Get total count for pagination
-    const totalBooks = await prisma.book.count();
+    const totalBooks = await prisma.book.count({ where });
     const totalPages = Math.ceil(totalBooks / limit);
 
-    // Fetch books with relations
+    // Fetch books with filters
     const books = await prisma.book.findMany({
+      where,
       skip,
       take: limit,
       include: {
@@ -38,7 +63,7 @@ export async function getAllBooks(
       },
     });
 
-    // Transform data to match our interface
+    // Transform data
     const transformedBooks: Book[] = books.map((book) => ({
       id: book.id,
       title: book.title,
@@ -72,7 +97,7 @@ export async function getAllBooks(
       },
     };
   } catch (error) {
-    console.error("Get all books error:", error);
+    console.error("Get books with filters error:", error);
     return {
       success: false,
       message: "Failed to fetch books",
@@ -81,7 +106,7 @@ export async function getAllBooks(
         currentPage: 1,
         totalPages: 0,
         totalBooks: 0,
-        limit: 10,
+        limit: 8,
       },
     };
   }
