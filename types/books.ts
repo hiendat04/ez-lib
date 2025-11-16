@@ -15,6 +15,7 @@ export interface Book {
   totalCopies: number;
   availableCopies: number;
   category: string;
+  year: number;
   description?: string;
   coverImageUrl?: string;
   createdAt: Date;

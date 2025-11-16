@@ -54,6 +54,7 @@ model Book {
   availableCopies Int          @default(1)
   isbn            String       @unique
   category        String?
+  year            Int?
   publisherId     String?
   publisher       Publisher?   @relation(fields: [publisherId], references: [id], onDelete: SetNull)
   description     String?
@@ -64,6 +65,7 @@ model Book {
 
   @@index([isbn])
   @@index([title])
+  @@index([year])
 }
 
 model BookAuthor {

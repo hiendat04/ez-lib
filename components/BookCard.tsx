@@ -1,8 +1,10 @@
 import Image from "next/image";
 import StatusBadge from "./StatusBadge";
 import { BookCardProps } from "@/types/landing";
+import Link from "next/link";
 
 const BookCard = ({
+  id,
   title,
   author,
   totalCopies,
@@ -28,9 +30,12 @@ const BookCard = ({
             {availableCopies}/{totalCopies}
           </p>
         </div>
-        <p className="bg-primary hover:bg-primary-hover mt-5 cursor-pointer rounded-md px-4 py-2 text-center font-medium text-white">
+        <Link
+          href={`/books/${id}`}
+          className="mt-4 inline-block w-full rounded-md bg-primary px-4 py-2 text-center text-white hover:bg-primary/90"
+        >
           View Details
-        </p>
+        </Link>
       </div>
     </div>
   );

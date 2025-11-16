@@ -1,3 +1,4 @@
+import { Book } from "@/types/books";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -90,30 +91,246 @@ async function main() {
   // 5) Books (create 24+ books)
   console.log("Creating books...");
   const booksData = [
-    { title: "To Kill a Mockingbird", isbn: "9780061120084", category: "Fiction", publisherIdx: 0, totalCopies: 5, description: "A novel about the injustices of the American South." },
-    { title: "1984", isbn: "9780451524935", category: "Dystopian", publisherIdx: 1, totalCopies: 6, description: "A dystopian novel about surveillance and totalitarianism." },
-    { title: "Pride and Prejudice", isbn: "9780141040349", category: "Romance", publisherIdx: 2, totalCopies: 4, description: "Classic novel exploring manners and matrimonial machinations." },
-    { title: "The Hobbit", isbn: "9780547928227", category: "Fantasy", publisherIdx: 2, totalCopies: 7, description: "Bilbo's adventure that sets the stage for The Lord of the Rings." },
-    { title: "I, Robot", isbn: "9780553382563", category: "Science Fiction", publisherIdx: 1, totalCopies: 3, description: "Classic collection of robot stories exploring ethics and AI." },
-    { title: "Frankenstein", isbn: "9780143131847", category: "Horror", publisherIdx: 3, totalCopies: 4, description: "Mary Shelley's gothic novel about a scientist and his creation." },
-    { title: "Brave New World", isbn: "9780060850524", category: "Dystopian", publisherIdx: 0, totalCopies: 5, description: "A future society shaped by technology, conditioning and drugs." },
-    { title: "The Great Gatsby", isbn: "9780743273565", category: "Fiction", publisherIdx: 4, totalCopies: 5, description: "A critique of the American Dream in the Jazz Age." },
-    { title: "War and Peace", isbn: "9780199232765", category: "Historical", publisherIdx: 3, totalCopies: 2, description: "Tolstoy's epic novel of Russian society during the Napoleonic wars." },
-    { title: "Adventures of Huckleberry Finn", isbn: "9780486280615", category: "Classic", publisherIdx: 4, totalCopies: 3, description: "A young boy's travels down the Mississippi River." },
-    { title: "Childhood's End", isbn: "9780345338986", category: "Science Fiction", publisherIdx: 5, totalCopies: 3, description: "Arthur C. Clarke's story of an alien intervention that ushers humanity to a new stage." },
-    { title: "Good Omens", isbn: "9780060853983", category: "Fantasy", publisherIdx: 0, totalCopies: 4, description: "Neil Gaiman & Terry Pratchett's comedic tale of an angel and a demon." },
-    { title: "Beloved", isbn: "9781400033416", category: "Fiction", publisherIdx: 1, totalCopies: 3, description: "Toni Morrison's novel about the legacy of slavery." },
-    { title: "Foundation", isbn: "9780553293357", category: "Science Fiction", publisherIdx: 5, totalCopies: 6, description: "Asimov's seminal series about the fall and rise of galactic empires." },
-    { title: "The Silmarillion", isbn: "9780618126989", category: "Fantasy", publisherIdx: 2, totalCopies: 2, description: "Tolkien's collection of mythopoeic tales for Middle-earth." },
-    { title: "Emma", isbn: "9780141439587", category: "Romance", publisherIdx: 2, totalCopies: 3, description: "Jane Austen's novel of matchmaking and social follies." },
-    { title: "The Left Hand of Darkness", isbn: "9780441478125", category: "Science Fiction", publisherIdx: 5, totalCopies: 3, description: "Ursula K. Le Guin's novel about gender and society." },
-    { title: "The Road", isbn: "9780307387899", category: "Post-Apocalyptic", publisherIdx: 1, totalCopies: 4, description: "Cormac McCarthy's bleak father-and-son journey." },
-    { title: "Slaughterhouse-Five", isbn: "9780440180296", category: "Fiction", publisherIdx: 0, totalCopies: 4, description: "Kurt Vonnegut's nonlinear satire on war." },
-    { title: "The Name of the Wind", isbn: "9780756404741", category: "Fantasy", publisherIdx: 4, totalCopies: 5, description: "A modern epic fantasy following Kvothe." },
-    { title: "American Gods", isbn: "9780062572233", category: "Fantasy", publisherIdx: 1, totalCopies: 3, description: "Neil Gaiman's novel about old gods vs new gods." },
-    { title: "Neuromancer", isbn: "9780441569595", category: "Cyberpunk", publisherIdx: 5, totalCopies: 3, description: "William Gibson's vision of cyberspace and corporate control." },
-    { title: "Dune", isbn: "9780441013593", category: "Science Fiction", publisherIdx: 5, totalCopies: 6, description: "Frank Herbert's desert-planet epic." },
-    { title: "Kindred", isbn: "9780807083697", category: "Historical", publisherIdx: 0, totalCopies: 4, description: "Octavia Butler's time-travel novel about slavery and ancestry." },
+    {
+      title: "To Kill a Mockingbird",
+      isbn: "9780061120084",
+      category: "Fiction",
+      publisherIdx: 0,
+      totalCopies: 5,
+      year: 1960,
+      description:
+        "A powerful novel about racial injustice and the loss of innocence in the American South, as seen through the eyes of a young girl.",
+    },
+    {
+      title: "1984",
+      isbn: "9780451524935",
+      category: "Dystopian",
+      publisherIdx: 1,
+      totalCopies: 6,
+      year: 1949,
+      description:
+        "A chilling dystopian masterpiece that explores the dangers of totalitarianism, mass surveillance, and the manipulation of truth.",
+    },
+    {
+      title: "Pride and Prejudice",
+      isbn: "9780141040349",
+      category: "Romance",
+      publisherIdx: 2,
+      totalCopies: 4,
+      year: 1813,
+      description:
+        "A classic novel of manners, marriage, and social status in early 19th-century England, centered on the spirited Elizabeth Bennet.",
+    },
+    {
+      title: "The Hobbit",
+      isbn: "9780547928227",
+      category: "Fantasy",
+      publisherIdx: 2,
+      totalCopies: 7,
+      year: 1937,
+      description:
+        "The enchanting prelude to The Lord of the Rings, following Bilbo Baggins on an unexpected journey to reclaim treasure from a dragon.",
+    },
+    {
+      title: "I, Robot",
+      isbn: "9780553382563",
+      category: "Science Fiction",
+      publisherIdx: 1,
+      totalCopies: 3,
+      year: 1950,
+      description:
+        "A collection of interconnected short stories that explore the ethical implications of artificial intelligence through the Three Laws of Robotics.",
+    },
+    {
+      title: "Frankenstein",
+      isbn: "9780143131847",
+      category: "Horror",
+      publisherIdx: 3,
+      totalCopies: 4,
+      year: 1818,
+      description:
+        "Mary Shelley's gothic masterpiece about the consequences of ambition and the creation of a sentient being in a scientific experiment gone wrong.",
+    },
+    {
+      title: "Brave New World",
+      isbn: "9780060850524",
+      category: "Dystopian",
+      publisherIdx: 0,
+      totalCopies: 5,
+      year: 1932,
+      description:
+        "A visionary novel depicting a future society where conformity and happiness are engineered, at the cost of freedom and individuality.",
+    },
+    {
+      title: "The Great Gatsby",
+      isbn: "9780743273565",
+      category: "Fiction",
+      publisherIdx: 4,
+      totalCopies: 5,
+      year: 1925,
+      description:
+        "A poignant critique of the American Dream, set in the lavish and decadent Jazz Age, exploring themes of wealth, love, and loss.",
+    },
+    {
+      title: "War and Peace",
+      isbn: "9780199232765",
+      category: "Historical",
+      publisherIdx: 3,
+      totalCopies: 2,
+      year: 1869,
+      description:
+        "An epic novel chronicling the lives of Russian aristocratic families during the Napoleonic invasion, weaving history with profound philosophy.",
+    },
+    {
+      title: "Adventures of Huckleberry Finn",
+      isbn: "9780486280615",
+      category: "Classic",
+      publisherIdx: 4,
+      totalCopies: 3,
+      year: 1884,
+      description:
+        "A seminal American novel about a young boy's journey down the Mississippi River with a runaway slave, exploring themes of freedom and morality.",
+    },
+    {
+      title: "Childhood's End",
+      isbn: "9780345338986",
+      category: "Science Fiction",
+      publisherIdx: 5,
+      totalCopies: 3,
+      year: 1953,
+      description:
+        "A thought-provoking story of humanity's final generation after a peaceful alien invasion ushers in an era of utopia, but at a mysterious cost.",
+    },
+    {
+      title: "Good Omens",
+      isbn: "9780060853983",
+      category: "Fantasy",
+      publisherIdx: 0,
+      totalCopies: 4,
+      year: 1990,
+      description:
+        "A witty and apocalyptic comedy about an angel and a demon who team up to prevent the end of the world because they've grown fond of Earth.",
+    },
+    {
+      title: "Beloved",
+      isbn: "9781400033416",
+      category: "Fiction",
+      publisherIdx: 1,
+      totalCopies: 3,
+      year: 1987,
+      description:
+        "A haunting and powerful novel about the psychological trauma of slavery, centered on a former slave whose past literally comes back to haunt her.",
+    },
+    {
+      title: "Foundation",
+      isbn: "9780553293357",
+      category: "Science Fiction",
+      publisherIdx: 5,
+      totalCopies: 6,
+      year: 1951,
+      description:
+        "A galactic epic about a band of exiles who must preserve knowledge and rebuild civilization amidst the collapse of a vast interstellar empire.",
+    },
+    {
+      title: "The Silmarillion",
+      isbn: "9780618126989",
+      category: "Fantasy",
+      publisherIdx: 2,
+      totalCopies: 2,
+      year: 1977,
+      description:
+        "The mythological and historical backstory of Middle-earth, chronicling the creation of the world and the epic tales of the First Age.",
+    },
+    {
+      title: "Emma",
+      isbn: "9780141439587",
+      category: "Romance",
+      publisherIdx: 2,
+      totalCopies: 3,
+      year: 1815,
+      description:
+        "A witty novel of manners about a clever, wealthy, and self-satisfied young woman who delights in matchmaking with disastrous results.",
+    },
+    {
+      title: "The Left Hand of Darkness",
+      isbn: "9780441478125",
+      category: "Science Fiction",
+      publisherIdx: 5,
+      totalCopies: 3,
+      year: 1969,
+      description:
+        "A groundbreaking novel exploring themes of gender and identity on a planet where inhabitants are ambisexual, challenging societal norms.",
+    },
+    {
+      title: "The Road",
+      isbn: "9780307387899",
+      category: "Post-Apocalyptic",
+      publisherIdx: 1,
+      totalCopies: 4,
+      year: 2006,
+      description:
+        "A stark and moving story of a father and son's journey through a desolate, post-apocalyptic landscape, clinging to hope and humanity.",
+    },
+    {
+      title: "Slaughterhouse-Five",
+      isbn: "9780440180296",
+      category: "Fiction",
+      publisherIdx: 0,
+      totalCopies: 4,
+      year: 1969,
+      description:
+        "A satirical and anti-war novel that follows Billy Pilgrim as he becomes 'unstuck in time,' experiencing his life out of order, including his time as a POW.",
+    },
+    {
+      title: "The Name of the Wind",
+      isbn: "9780756404741",
+      category: "Fantasy",
+      publisherIdx: 4,
+      totalCopies: 5,
+      year: 2007,
+      description:
+        "The first book in an epic fantasy series, detailing the early life of a magically gifted young man who grows into a notorious wizard.",
+    },
+    {
+      title: "American Gods",
+      isbn: "9780062572233",
+      category: "Fantasy",
+      publisherIdx: 1,
+      totalCopies: 3,
+      year: 2001,
+      description:
+        "A story of a brewing war between old mythological gods and new American gods of money, technology, and media, seen through the eyes of an ex-convict.",
+    },
+    {
+      title: "Neuromancer",
+      isbn: "9780441569595",
+      category: "Cyberpunk",
+      publisherIdx: 5,
+      totalCopies: 3,
+      year: 1984,
+      description:
+        "The seminal cyberpunk novel about a washed-up computer hacker hired for one last job, which draws him into a world of artificial intelligence and digital espionage.",
+    },
+    {
+      title: "Dune",
+      isbn: "9780441013593",
+      category: "Science Fiction",
+      publisherIdx: 5,
+      totalCopies: 6,
+      year: 1965,
+      description:
+        "An epic science fiction saga of politics, religion, and power on a desert planet that is the sole source of a priceless spice.",
+    },
+    {
+      title: "Kindred",
+      isbn: "9780807083697",
+      category: "Historical",
+      publisherIdx: 0,
+      totalCopies: 4,
+      year: 1979,
+      description:
+        "A gripping novel that combines science fiction with slave narrative, as a modern African-American woman is repeatedly pulled back in time to the antebellum South.",
+    },
   ];
 
   const books: any[] = [];
@@ -124,10 +341,11 @@ async function main() {
         title: b.title,
         isbn: b.isbn,
         category: b.category,
+        year: b.year, // Add the year here
         publisherId: publishers[b.publisherIdx].id,
         totalCopies: b.totalCopies,
         availableCopies: b.totalCopies,
-        description: b.description,
+        description: b.description, // The updated description will be used
         imageUrl: null,
       },
     });
@@ -167,7 +385,9 @@ async function main() {
   ];
 
   // Ensure all authors referenced in explicitPairs exist, create missing ones
-  const explicitAuthorNames = Array.from(new Set(explicitPairs.map((p) => p.authorName)));
+  const explicitAuthorNames = Array.from(
+    new Set(explicitPairs.map((p) => p.authorName)),
+  );
   for (const name of explicitAuthorNames) {
     if (!authors.find((a) => a.name === name)) {
       const a = await prisma.author.create({ data: { name } });
@@ -183,12 +403,21 @@ async function main() {
   // Add additional many-to-many links programmatically: some books will have 2 authors
   // e.g., make "1984" also linked to "Aldous Huxley" (to demonstrate multi-author in seed)
   bookAuthorPairs.push({ bookTitle: "1984", authorName: "Aldous Huxley" });
-  bookAuthorPairs.push({ bookTitle: "Good Omens", authorName: "Terry Pratchett" });
-  bookAuthorPairs.push({ bookTitle: "Foundation", authorName: "Arthur C. Clarke" }); // fictional pairing for demo
+  bookAuthorPairs.push({
+    bookTitle: "Good Omens",
+    authorName: "Terry Pratchett",
+  });
+  bookAuthorPairs.push({
+    bookTitle: "Foundation",
+    authorName: "Arthur C. Clarke",
+  }); // fictional pairing for demo
   bookAuthorPairs.push({ bookTitle: "Dune", authorName: "Frank Herbert" }); // already present but safe (duplicate will be deduped below)
 
   // Deduplicate pairs
-  const uniquePairs = new Map<string, { bookTitle: string; authorName: string }>();
+  const uniquePairs = new Map<
+    string,
+    { bookTitle: string; authorName: string }
+  >();
   for (const p of bookAuthorPairs) {
     const key = `${p.bookTitle}:::${p.authorName}`;
     if (!uniquePairs.has(key)) uniquePairs.set(key, p);
@@ -208,7 +437,10 @@ async function main() {
         });
       } catch (err: any) {
         // ignore duplicate key errors in case of race/duplication, log others
-        console.warn(`Could not create bookAuthor for ${pair.bookTitle} / ${pair.authorName}:`, err?.message ?? err);
+        console.warn(
+          `Could not create bookAuthor for ${pair.bookTitle} / ${pair.authorName}:`,
+          err?.message ?? err,
+        );
       }
     } else {
       console.warn("Missing book or author for pair:", pair);
@@ -220,13 +452,15 @@ async function main() {
     const book = books[i];
     const extraAuthor = authors[(i + 4) % authors.length];
     // avoid creating duplicate pair
-    const exists = await prisma.bookAuthor.findUnique({
-      where: {
-        // composite PK fields mapping depends on Prisma client, use findFirst for safe lookup
-        // We'll use findFirst to check existence
-        AND: [{ bookId: book.id }, { authorId: extraAuthor.id }],
-      } as any,
-    }).catch(() => null);
+    const exists = await prisma.bookAuthor
+      .findUnique({
+        where: {
+          // composite PK fields mapping depends on Prisma client, use findFirst for safe lookup
+          // We'll use findFirst to check existence
+          AND: [{ bookId: book.id }, { authorId: extraAuthor.id }],
+        } as any,
+      })
+      .catch(() => null);
 
     if (!exists) {
       await prisma.bookAuthor.create({
