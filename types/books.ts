@@ -79,3 +79,10 @@ export interface BorrowActionsProps {
   user: User | null;
   bookId: string;
 }
+
+export interface StatCardProps {
+  color: string;
+  number: number;
+  title: string;
+  Icon: any;
+}

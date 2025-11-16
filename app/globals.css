@@ -8,6 +8,9 @@
   --accent: #d4a574;
   --primary-light: #6c757d;
   --primary-hover: #234a5e;
+  --green: #28a745;
+  --yellow: #ffc107;
+  --red: #dc3545;
 }
 
 @theme inline {
@@ -19,6 +22,9 @@
   --font-sans: var(--font-poppins);
   --color-primary-light: var(--primary-light);
   --color-primary-hover: var(--primary-hover);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-red: var(--red);
 }
 
 body {
