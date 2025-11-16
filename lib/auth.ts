@@ -5,6 +5,7 @@ import {
   RegisterResponse,
   UserPayload,
 } from "@/types/auth";
+import { WindowSharp } from "@mui/icons-material";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -72,7 +73,6 @@ export async function loginUser(
       path: "/",
     });
 
-    
     return {
       success: true,
       message: "Login successful",
@@ -183,7 +183,6 @@ export async function getSession(): Promise<UserPayload | null> {
     ) as UserPayload;
     return user;
   } catch (error) {
-    // Token is invalid or expired
     console.error("Session verification error:", error);
     return null;
   }
