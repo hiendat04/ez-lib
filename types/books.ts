@@ -1,3 +1,5 @@
+import { User } from "./auth";
+
 export interface Author {
   id: string;
   name: string;
@@ -62,4 +64,18 @@ export interface CategoryResponse {
   success: boolean;
   message: string;
   categories: string[];
+}
+
+export interface BrowseBooksPageProps {
+  searchParams: {
+    page?: string;
+    limit?: string;
+    search?: string;
+    category?: string;
+  };
+}
+
+export interface BorrowActionsProps {
+  user: User | null;
+  bookId: string;
 }

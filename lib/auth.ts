@@ -1,6 +1,14 @@
-import { LoginCredentials, LoginResponse, RegisterCredentials, RegisterResponse } from "@/types/auth";
+import {
+  LoginCredentials,
+  LoginResponse,
+  RegisterCredentials,
+  RegisterResponse,
+  UserPayload,
+} from "@/types/auth";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 const prisma = new PrismaClient();
 
@@ -43,16 +51,32 @@ export async function loginUser(
       };
     }
 
-    // Return success response
+    // Create JWT Payload
+    const userPayload = {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role.name,
+    };
+
+    // Sign the token
+    const token = jwt.sign(userPayload, process.env.JWT_SECRET!, {
+      expiresIn: "1d", // Token expires in 1 day
+    });
+
+    // Set the token in a secure, HttpOnly cookie
+    (await cookies()).set("session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24, // 1 day in seconds
+      path: "/",
+    });
+
+    
     return {
       success: true,
       message: "Login successful",
-      user: {
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role.name,
-      },
+      user: userPayload, // Return user payload without password
     };
   } catch (error) {
     console.error("Login error:", error);
@@ -63,7 +87,9 @@ export async function loginUser(
   }
 }
 
-export async function registerUser(credentials: RegisterCredentials): Promise<RegisterResponse> {
+export async function registerUser(
+  credentials: RegisterCredentials,
+): Promise<RegisterResponse> {
   try {
     const { email, password, fullName } = credentials;
 
@@ -71,19 +97,19 @@ export async function registerUser(credentials: RegisterCredentials): Promise<Re
     if (!email || !password || !fullName) {
       return {
         success: false,
-        message: "All fields are required"
+        message: "All fields are required",
       };
     }
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
 
     if (existingUser) {
       return {
         success: false,
-        message: "User with this email already exists"
+        message: "User with this email already exists",
       };
     }
 
@@ -91,19 +117,19 @@ export async function registerUser(credentials: RegisterCredentials): Promise<Re
     if (password.length < 6) {
       return {
         success: false,
-        message: "Password must be at least 6 characters long"
+        message: "Password must be at least 6 characters long",
       };
     }
 
     // Get default USER role
     const userRole = await prisma.role.findUnique({
-      where: { name: "USER" }
+      where: { name: "USER" },
     });
 
     if (!userRole) {
       return {
         success: false,
-        message: "System error: Default role not found"
+        message: "System error: Default role not found",
       };
     }
 
@@ -116,11 +142,11 @@ export async function registerUser(credentials: RegisterCredentials): Promise<Re
         email,
         password: hashedPassword,
         fullName,
-        roleId: userRole.id
+        roleId: userRole.id,
       },
       include: {
-        role: true
-      }
+        role: true,
+      },
     });
 
     return {
@@ -130,15 +156,35 @@ export async function registerUser(credentials: RegisterCredentials): Promise<Re
         id: newUser.id,
         email: newUser.email,
         fullName: newUser.fullName,
-        role: newUser.role.name
-      }
+        role: newUser.role.name,
+      },
     };
-
   } catch (error) {
     console.error("Registration error:", error);
     return {
       success: false,
-      message: "An error occurred during registration"
+      message: "An error occurred during registration",
     };
+  }
+}
+
+export async function getSession(): Promise<UserPayload | null> {
+  const sessionToken = (await cookies()).get("session")?.value;
+
+  if (!sessionToken) {
+    return null;
+  }
+
+  try {
+    // Verify the token and return the user payload
+    const user = jwt.verify(
+      sessionToken,
+      process.env.JWT_SECRET!,
+    ) as UserPayload;
+    return user;
+  } catch (error) {
+    // Token is invalid or expired
+    console.error("Session verification error:", error);
+    return null;
   }
 }

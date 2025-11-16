@@ -13,76 +13,10 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import StepCard from "@/components/landing/StepCard";
 import Footer from "@/components/landing/Footer";
-export default function Home() {
-  // Mock data for featured books
-  // TODO: Replace with real data from backend
-  const books = [
-    {
-      id: "1",
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      totalCopies: 10,
-      availableCopies: 4,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "2",
-      title: "To Kill a Mockingbird",
-      author: "Harper Lee",
-      totalCopies: 8,
-      availableCopies: 2,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "3",
-      title: "1984",
-      author: "George Orwell",
-      totalCopies: 5,
-      availableCopies: 3,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "4",
-      title: "Pride and Prejudice",
-      author: "Jane Austen",
-      totalCopies: 12,
-      availableCopies: 6,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "5",
-      title: "The Catcher in the Rye",
-      author: "J.D. Salinger",
-      totalCopies: 7,
-      availableCopies: 3,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "6",
-      title: "Brave New World",
-      author: "Aldous Huxley",
-      totalCopies: 9,
-      availableCopies: 4,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "7",
-      title: "One Hundred Years of Solitude",
-      author: "Gabriel García Márquez",
-      totalCopies: 11,
-      availableCopies: 6,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-    {
-      id: "8",
-      title: "Lord of the Flies",
-      author: "William Golding",
-      totalCopies: 6,
-      availableCopies: 2,
-      coverImageUrl: "/landing/dummy-book-cover.jpg",
-    },
-  ];
+import { Author } from "@prisma/client";
+import Link from "next/link";
 
+export default async function Home() {
   const features = [
     {
       icon: ImportContactsTwoToneIcon,
@@ -137,6 +71,13 @@ export default function Home() {
       stepDetails: "Borrow books instantly and manage your reading journey",
     },
   ];
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const books = await fetch(`${baseUrl}/api/books?limit=8`, {
+    cache: "no-store",
+  })
+    .then((res) => res.json())
+    .then((data) => data.books);
+
   return (
     <>
       <PublicHeader />
@@ -150,12 +91,14 @@ export default function Home() {
           subtitle="Discover some of our most popular titles"
         />
         <div className="grid grid-cols-4">
-          {books.map((book) => (
+          {books.map((book: any) => (
             <BookCard
               key={book.id}
               id={book.id}
               title={book.title}
-              author={book.author}
+              author={book.authors
+                .map((author: Author) => author.name)
+                .join(", ")}
               totalCopies={book.totalCopies}
               availableCopies={book.availableCopies}
               coverImageUrl={book.coverImageUrl}
@@ -163,9 +106,9 @@ export default function Home() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <button className="bg-primary hover:bg-primary-hover cursor-pointer rounded-md px-6 py-2 font-medium text-white transition">
+          <Link href="/books" className="bg-primary hover:bg-primary-hover cursor-pointer rounded-md px-6 py-2 font-medium text-white transition">
             Browse All Books
-          </button>
+          </Link>
         </div>
       </FeatureLayout>
 
@@ -213,11 +156,11 @@ export default function Home() {
           title="Ready to Start Your Reading Journey?"
           subtitle="Join our community of book lovers today and unlock unlimited access to knowledge"
         />
-          <div className="mt-8 text-center">
-            <button className="bg-accent cursor-pointer rounded-md px-6 py-3 font-medium text-black transition hover:shadow-lg">
-              Get Started Now
-            </button>
-          </div>
+        <div className="mt-8 text-center">
+          <button className="bg-accent cursor-pointer rounded-md px-6 py-3 font-medium text-black transition hover:shadow-lg">
+            Get Started Now
+          </button>
+        </div>
       </FeatureLayout>
       <Footer />
     </>

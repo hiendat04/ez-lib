@@ -1,22 +1,17 @@
+
 import BookCard from "@/components/BookCard";
 import Pagination from "@/components/books/Pagination";
 import SearchAndFilter from "@/components/books/SearchAndFilter";
 import FeatureLayout from "@/components/landing/FeatureLayout";
 import FeatureTitle from "@/components/landing/FeatureTitle";
 import PublicHeader from "@/components/landing/PublicHeader";
+import { getSession } from "@/lib/auth";
 
 import { getAllBooksWithFilters } from "@/lib/books";
-import { Author, Book } from "@/types/books";
+import { Author, Book, BrowseBooksPageProps } from "@/types/books";
 import Link from "next/link";
 
-interface BrowseBooksPageProps {
-  searchParams: {
-    page?: string;
-    limit?: string;
-    search?: string;
-    category?: string;
-  };
-}
+
 
 const BrowseBooksPage = async ({ searchParams }: BrowseBooksPageProps) => {
   const params = await searchParams;

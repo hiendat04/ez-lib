@@ -20,5 +20,28 @@ export interface AuthResponse {
   };
 }
 
+export interface User {
+  id: string;
+  email: string;
+  fullName: string;
+  role: string;
+}
+
+export interface UserPayload {
+  id: string;
+  email: string;
+  fullName: string;
+  role: string;
+}
+
+
+export interface AuthContextType {
+  user: User | null;
+  login: (userData: User) => void;
+  logout: () => void;
+}
+
 export type LoginResponse = AuthResponse;
 export type RegisterResponse = AuthResponse;
+
+

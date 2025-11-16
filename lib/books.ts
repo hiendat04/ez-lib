@@ -148,7 +148,7 @@ export async function getBookById(bookId: string): Promise<BookResponse> {
       totalCopies: book.totalCopies,
       availableCopies: book.availableCopies,
       category: book.category ?? "",
-      year: book.year,
+      year: book.year ? book.year : 0,
       description: book.description ?? "",
       coverImageUrl: book.imageUrl ?? "/landing/dummy-book-cover.jpg",
       createdAt: book.createdAt,

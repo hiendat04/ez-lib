@@ -1,6 +1,9 @@
+"use client";
+import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 
 const PublicHeader = () => {
+  const { user, logout } = useAuth();
   return (
     <header className="fixed top-0 right-0 left-0 z-50 flex h-16 items-center justify-between border-gray-200 bg-white px-40 shadow-md">
       <Link href="/" className="flex items-center gap-3">
@@ -16,20 +19,39 @@ const PublicHeader = () => {
         <p className="hover:text-primary cursor-pointer">Features</p>
         <p className="hover:text-primary cursor-pointer">About</p>
       </nav>
-      <div className="flex gap-7">
-        <Link
-          href="/login"
-          className="text-primary cursor-pointer rounded-lg px-4 py-2 font-medium hover:bg-slate-200"
-        >
-          Sign In
-        </Link>
-        <Link
-          href="/register"
-          className="bg-primary cursor-pointer rounded-lg px-4 py-2 font-medium text-white"
-        >
-          Sign Up
-        </Link>
-      </div>
+      <nav className="flex gap-7">
+        {user ? (
+          <>
+            <Link
+              href="/dashboard"
+              className="text-primary cursor-pointer rounded-lg px-4 py-2 font-medium hover:bg-slate-200"
+            >
+              Dashboard
+            </Link>
+            <button
+              onClick={logout}
+              className="bg-primary cursor-pointer rounded-lg px-4 py-2 font-medium text-white"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="text-primary cursor-pointer rounded-lg px-4 py-2 font-medium hover:bg-slate-200"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              className="bg-primary cursor-pointer rounded-lg px-4 py-2 font-medium text-white"
+            >
+              Sign Up
+            </Link>
+          </>
+        )}
+      </nav>
     </header>
   );
 };

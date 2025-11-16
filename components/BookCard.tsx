@@ -12,7 +12,7 @@ const BookCard = ({
   coverImageUrl = "/landing/dummy-book-cover.jpg",
 }: BookCardProps) => {
   return (
-    <div className="m-4 flex cursor-pointer flex-col gap-4 rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg">
+    <div className="m-4 flex flex-col gap-4 rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg">
       <div className="relative aspect-3/4 w-full overflow-hidden rounded-t-lg">
         <Image
           src={coverImageUrl}

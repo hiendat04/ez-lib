@@ -6,8 +6,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Image from "next/image";
 import StatusBadge from "@/components/StatusBadge";
 import { Author } from "@prisma/client";
+import { getSession } from "@/lib/auth";
+import BorrowActions from "@/components/books/BorrowActions";
 
 const BookDetailPage = async ({ params }: { params: { id: string } }) => {
+  const session = await getSession();
+
   const { id } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
@@ -16,8 +20,6 @@ const BookDetailPage = async ({ params }: { params: { id: string } }) => {
   }).then((res) => res.json());
 
   const book = response.book;
-
-  console.log("Book detail result:", book);
 
   const {
     title,
@@ -87,7 +89,7 @@ const BookDetailPage = async ({ params }: { params: { id: string } }) => {
                 </div>
                 <div>
                   <p className="text-primary-light text-sm font-medium">Year</p>
-                  <p className="text-gray-800">{year || 'N/A'}</p>
+                  <p className="text-gray-800">{year || "N/A"}</p>
                 </div>
                 <div>
                   <p className="text-primary-light text-sm font-medium">
@@ -98,20 +100,7 @@ const BookDetailPage = async ({ params }: { params: { id: string } }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col items-start gap-4 pt-4">
-                <Link
-                  href="/register"
-                  className="bg-primary hover:bg-primary/90 w-full rounded-md px-6 py-3 text-center font-semibold text-white transition"
-                >
-                  Sign up to Borrow
-                </Link>
-                <Link
-                  href="/login"
-                  className="text-primary w-full text-center text-sm hover:underline"
-                >
-                  Already have an account?
-                </Link>
-              </div>
+              <BorrowActions user={session} bookId={book.id} />
 
               {/* Separator */}
               <hr className="border-gray-200" />
@@ -121,9 +110,7 @@ const BookDetailPage = async ({ params }: { params: { id: string } }) => {
                 <h2 className="text-lg font-semibold text-gray-800">
                   About this book
                 </h2>
-                <p className="mt-2 text-gray-600">
-                  {description}
-                </p>
+                <p className="mt-2 text-gray-600">{description}</p>
               </div>
             </div>
           </div>

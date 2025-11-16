@@ -87,6 +87,39 @@ async function main() {
     const p = await prisma.publisher.create({ data: { name: pName } });
     publishers.push(p);
   }
+  const imageUrls = {
+    "1984.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/1984.jpg",
+    // Adjusted key for easier matching
+    "american-gods.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/american-god.jpg",
+    "beloved.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/beloved.jpg",
+    "brave-new-world.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/brave-new-world.jpg",
+    "dune.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/dune.jpg",
+    // Adjusted key
+    "adventures-of-huckleberry-finn.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/the-adventure-of-huckleberry-finn.jpg",
+    "the-great-gatsby.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/the-great-gatsby.jpg",
+    "the-hobbit.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/the-hobbit.jpg",
+    "the-left-hand-of-darkness.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/the-left-hand-of-darkness.jpg",
+    "the-name-of-the-wind.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/the-name-of-the-wind.jpg",
+    "the-road.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/the-road.jpg",
+    "the-silmarillion.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/the-silmarillion.jpg",
+    // Adjusted key
+    "to-kill-a-mockingbird.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/to-kill-a-mocking-bird.jpg",
+    "war-and-peace.jpg":
+      "https://jcfcitg4mdqgayha.public.blob.vercel-storage.com/book-covers/war-and-peace.jpg",
+  };
 
   // 5) Books (create 24+ books)
   console.log("Creating books...");
@@ -98,6 +131,7 @@ async function main() {
       publisherIdx: 0,
       totalCopies: 5,
       year: 1960,
+      imageUrl: imageUrls["to-kill-a-mockingbird.jpg"] || null,
       description:
         "A powerful novel about racial injustice and the loss of innocence in the American South, as seen through the eyes of a young girl.",
     },
@@ -108,6 +142,7 @@ async function main() {
       publisherIdx: 1,
       totalCopies: 6,
       year: 1949,
+      imageUrl: imageUrls["1984.jpg"] || null,
       description:
         "A chilling dystopian masterpiece that explores the dangers of totalitarianism, mass surveillance, and the manipulation of truth.",
     },
@@ -118,6 +153,7 @@ async function main() {
       publisherIdx: 2,
       totalCopies: 4,
       year: 1813,
+      imageUrl: null, // No image provided
       description:
         "A classic novel of manners, marriage, and social status in early 19th-century England, centered on the spirited Elizabeth Bennet.",
     },
@@ -128,6 +164,7 @@ async function main() {
       publisherIdx: 2,
       totalCopies: 7,
       year: 1937,
+      imageUrl: imageUrls["the-hobbit.jpg"] || null,
       description:
         "The enchanting prelude to The Lord of the Rings, following Bilbo Baggins on an unexpected journey to reclaim treasure from a dragon.",
     },
@@ -138,6 +175,7 @@ async function main() {
       publisherIdx: 1,
       totalCopies: 3,
       year: 1950,
+      imageUrl: null, // No image provided
       description:
         "A collection of interconnected short stories that explore the ethical implications of artificial intelligence through the Three Laws of Robotics.",
     },
@@ -148,6 +186,7 @@ async function main() {
       publisherIdx: 3,
       totalCopies: 4,
       year: 1818,
+      imageUrl: null, // No image provided
       description:
         "Mary Shelley's gothic masterpiece about the consequences of ambition and the creation of a sentient being in a scientific experiment gone wrong.",
     },
@@ -158,6 +197,7 @@ async function main() {
       publisherIdx: 0,
       totalCopies: 5,
       year: 1932,
+      imageUrl: imageUrls["brave-new-world.jpg"] || null,
       description:
         "A visionary novel depicting a future society where conformity and happiness are engineered, at the cost of freedom and individuality.",
     },
@@ -168,6 +208,7 @@ async function main() {
       publisherIdx: 4,
       totalCopies: 5,
       year: 1925,
+      imageUrl: imageUrls["the-great-gatsby.jpg"] || null,
       description:
         "A poignant critique of the American Dream, set in the lavish and decadent Jazz Age, exploring themes of wealth, love, and loss.",
     },
@@ -178,6 +219,7 @@ async function main() {
       publisherIdx: 3,
       totalCopies: 2,
       year: 1869,
+      imageUrl: imageUrls["war-and-peace.jpg"] || null,
       description:
         "An epic novel chronicling the lives of Russian aristocratic families during the Napoleonic invasion, weaving history with profound philosophy.",
     },
@@ -188,6 +230,7 @@ async function main() {
       publisherIdx: 4,
       totalCopies: 3,
       year: 1884,
+      imageUrl: imageUrls["adventures-of-huckleberry-finn.jpg"] || null,
       description:
         "A seminal American novel about a young boy's journey down the Mississippi River with a runaway slave, exploring themes of freedom and morality.",
     },
@@ -198,6 +241,7 @@ async function main() {
       publisherIdx: 5,
       totalCopies: 3,
       year: 1953,
+      imageUrl: null, // No image provided
       description:
         "A thought-provoking story of humanity's final generation after a peaceful alien invasion ushers in an era of utopia, but at a mysterious cost.",
     },
@@ -208,6 +252,7 @@ async function main() {
       publisherIdx: 0,
       totalCopies: 4,
       year: 1990,
+      imageUrl: null, // No image provided
       description:
         "A witty and apocalyptic comedy about an angel and a demon who team up to prevent the end of the world because they've grown fond of Earth.",
     },
@@ -218,6 +263,7 @@ async function main() {
       publisherIdx: 1,
       totalCopies: 3,
       year: 1987,
+      imageUrl: imageUrls["beloved.jpg"] || null,
       description:
         "A haunting and powerful novel about the psychological trauma of slavery, centered on a former slave whose past literally comes back to haunt her.",
     },
@@ -228,6 +274,7 @@ async function main() {
       publisherIdx: 5,
       totalCopies: 6,
       year: 1951,
+      imageUrl: null, // No image provided
       description:
         "A galactic epic about a band of exiles who must preserve knowledge and rebuild civilization amidst the collapse of a vast interstellar empire.",
     },
@@ -238,6 +285,7 @@ async function main() {
       publisherIdx: 2,
       totalCopies: 2,
       year: 1977,
+      imageUrl: imageUrls["the-silmarillion.jpg"] || null,
       description:
         "The mythological and historical backstory of Middle-earth, chronicling the creation of the world and the epic tales of the First Age.",
     },
@@ -248,6 +296,7 @@ async function main() {
       publisherIdx: 2,
       totalCopies: 3,
       year: 1815,
+      imageUrl: null, // No image provided
       description:
         "A witty novel of manners about a clever, wealthy, and self-satisfied young woman who delights in matchmaking with disastrous results.",
     },
@@ -258,6 +307,7 @@ async function main() {
       publisherIdx: 5,
       totalCopies: 3,
       year: 1969,
+      imageUrl: imageUrls["the-left-hand-of-darkness.jpg"] || null,
       description:
         "A groundbreaking novel exploring themes of gender and identity on a planet where inhabitants are ambisexual, challenging societal norms.",
     },
@@ -268,6 +318,7 @@ async function main() {
       publisherIdx: 1,
       totalCopies: 4,
       year: 2006,
+      imageUrl: imageUrls["the-road.jpg"] || null,
       description:
         "A stark and moving story of a father and son's journey through a desolate, post-apocalyptic landscape, clinging to hope and humanity.",
     },
@@ -278,6 +329,7 @@ async function main() {
       publisherIdx: 0,
       totalCopies: 4,
       year: 1969,
+      imageUrl: null, // No image provided
       description:
         "A satirical and anti-war novel that follows Billy Pilgrim as he becomes 'unstuck in time,' experiencing his life out of order, including his time as a POW.",
     },
@@ -288,6 +340,7 @@ async function main() {
       publisherIdx: 4,
       totalCopies: 5,
       year: 2007,
+      imageUrl: imageUrls["the-name-of-the-wind.jpg"] || null,
       description:
         "The first book in an epic fantasy series, detailing the early life of a magically gifted young man who grows into a notorious wizard.",
     },
@@ -298,6 +351,7 @@ async function main() {
       publisherIdx: 1,
       totalCopies: 3,
       year: 2001,
+      imageUrl: imageUrls["american-gods.jpg"] || null,
       description:
         "A story of a brewing war between old mythological gods and new American gods of money, technology, and media, seen through the eyes of an ex-convict.",
     },
@@ -308,6 +362,7 @@ async function main() {
       publisherIdx: 5,
       totalCopies: 3,
       year: 1984,
+      imageUrl: null, // No image provided
       description:
         "The seminal cyberpunk novel about a washed-up computer hacker hired for one last job, which draws him into a world of artificial intelligence and digital espionage.",
     },
@@ -318,6 +373,7 @@ async function main() {
       publisherIdx: 5,
       totalCopies: 6,
       year: 1965,
+      imageUrl: imageUrls["dune.jpg"] || null,
       description:
         "An epic science fiction saga of politics, religion, and power on a desert planet that is the sole source of a priceless spice.",
     },
@@ -328,29 +384,11 @@ async function main() {
       publisherIdx: 0,
       totalCopies: 4,
       year: 1979,
+      imageUrl: null, // No image provided
       description:
         "A gripping novel that combines science fiction with slave narrative, as a modern African-American woman is repeatedly pulled back in time to the antebellum South.",
     },
   ];
-
-  const books: any[] = [];
-  for (let i = 0; i < booksData.length; i++) {
-    const b = booksData[i];
-    const created = await prisma.book.create({
-      data: {
-        title: b.title,
-        isbn: b.isbn,
-        category: b.category,
-        year: b.year, // Add the year here
-        publisherId: publishers[b.publisherIdx].id,
-        totalCopies: b.totalCopies,
-        availableCopies: b.totalCopies,
-        description: b.description, // The updated description will be used
-        imageUrl: null,
-      },
-    });
-    books.push(created);
-  }
 
   // 6) Populate book-author (junction) table to show many-to-many relationships
   console.log("Linking books and authors (bookAuthor junction table)...");

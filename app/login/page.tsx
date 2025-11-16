@@ -6,12 +6,16 @@ import { useState } from "react";
 import PublicHeader from "@/components/landing/PublicHeader";
 import Input from "@/components/form/Input";
 import Loading from "@/components/Loading";
+import { useAuth } from "@/context/authContext";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,9 +35,8 @@ const LoginPage = () => {
 
       if (data.success) {
         // Store user data in localStorage or context
-        localStorage.setItem("user", JSON.stringify(data.user));
-        // Redirect to dashboard or home page
-        window.location.href = "/dashboard";
+        login(data.user);
+        router.push("/");
       } else {
         setError(data.message);
       }
