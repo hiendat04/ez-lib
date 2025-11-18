@@ -10,6 +10,7 @@ const BookCard = ({
   totalCopies,
   availableCopies,
   coverImageUrl = "/landing/dummy-book-cover.jpg",
+  detailLink,
 }: BookCardProps) => {
   return (
     <div className="m-4 flex flex-col gap-4 rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg">
@@ -25,14 +26,19 @@ const BookCard = ({
         <p className="">{title}</p>
         <p className="text-gray-500">{author}</p>
         <div className="flex justify-between text-sm text-gray-600">
-          <StatusBadge isAvailable />
+          <StatusBadge
+            className={
+              availableCopies > 0 ? "bg-green text-white" : "bg-red text-white"
+            }
+            text={availableCopies > 0 ? "Available" : "Unavailable"}
+          />
           <p>
             {availableCopies}/{totalCopies}
           </p>
         </div>
         <Link
-          href={`/books/${id}`}
-          className="mt-4 inline-block w-full rounded-md bg-primary px-4 py-2 text-center text-white hover:bg-primary/90"
+          href={`${detailLink}/${id}`}
+          className="bg-primary hover:bg-primary/90 mt-4 inline-block w-full rounded-md px-4 py-2 text-center text-white"
         >
           View Details
         </Link>

@@ -3,7 +3,7 @@ import Input from "@/components/form/Input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 
-const SearchAndFilter = () => {
+const SearchAndFilter = ({ baseUrl }: { baseUrl: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = useState(
@@ -20,7 +20,7 @@ const SearchAndFilter = () => {
     if (category) params.set("category", category);
     params.set("page", "1"); // Reset to first page when searching/filtering
 
-    router.push(`/books?${params.toString()}`);
+    router.push(`${baseUrl}?${params.toString()}`);
   };
 
   const handleSearchChange = (value: string) => {
@@ -34,7 +34,6 @@ const SearchAndFilter = () => {
     updateURL(searchValue, category);
   };
 
-  // Call the API when component mounts
   useEffect(() => {
     const fetchCategories = async () => {
       try {

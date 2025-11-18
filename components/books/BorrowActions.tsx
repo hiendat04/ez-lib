@@ -2,12 +2,43 @@
 
 import { BorrowActionsProps } from "@/types/books";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function BorrowActions({ user, bookId }: BorrowActionsProps) {
-  const handleBorrow = () => {
-    // TODO: Implement the logic to borrow the book
-    console.log(`User ${user?.id} is borrowing book ${bookId}`);
-    alert("Borrow functionality not yet implemented.");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleBorrow = async () => {
+    if (!user) {
+      toast.error("You must be logged in to borrow a book.");
+      return;
+    }
+    setIsLoading(true);
+    const toastId = toast.loading("Processing your request...");
+
+    try {
+      const response = await fetch("/api/loans", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookId }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success("Book borrowed successfully!", { id: toastId });
+        // Refresh the current page to show updated available copies
+        router.refresh();
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to borrow book.", { id: toastId });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // If a user is logged in, show the "Borrow Now" button
@@ -18,7 +49,7 @@ export default function BorrowActions({ user, bookId }: BorrowActionsProps) {
           onClick={handleBorrow}
           className="bg-primary hover:bg-primary/90 w-full rounded-md px-6 py-3 text-center font-semibold text-white transition"
         >
-          Borrow Now
+          {isLoading ? "Processing..." : "Borrow Now"}
         </button>
         <p className="w-full text-center text-sm text-gray-500">
           Welcome, {user.fullName}!

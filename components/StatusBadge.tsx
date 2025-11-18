@@ -1,16 +1,21 @@
-const StatusBadge = ({ isAvailable }: { isAvailable: boolean }) => {
+import { clsx } from "clsx";
+
+interface StatusBadgeProps {
+  text: string;
+  className?: string;
+}
+
+const StatusBadge = ({ text, className }: StatusBadgeProps) => {
   return (
-    <>
-      {isAvailable ? (
-        <p className="rounded-full bg-green-600 px-3 py-1 text-sm font-medium text-white">
-          Available
-        </p>
-      ) : (
-        <p className="rounded-full bg-red-600 px-3 py-1 text-sm font-medium text-white">
-          Unavailable
-        </p>
+    <span
+      className={clsx(
+        "inline-flex w-max items-center rounded-full px-3 py-1 text-sm font-medium",
+        className,
       )}
-    </>
+    >
+      {text}
+    </span>
   );
 };
+
 export default StatusBadge;

@@ -5,12 +5,14 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   totalBooks: number;
+  baseUrl: string;
 }
 
 const Pagination = ({
   currentPage,
   totalPages,
   totalBooks,
+  baseUrl,
 }: PaginationProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,7 +20,7 @@ const Pagination = ({
   const createPageURL = (page: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", page.toString());
-    return `/books?${params.toString()}`;
+    return `${baseUrl}?${params.toString()}`;
   };
 
   const goToPage = (page: number) => {
@@ -28,7 +30,7 @@ const Pagination = ({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="mt-8 mb-10 flex items-center justify-center gap-4 ml-20">
+    <div className="mt-8 mb-10 ml-20 flex items-center justify-center gap-4">
       <button
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage <= 1}
@@ -45,7 +47,7 @@ const Pagination = ({
             className={`rounded px-3 py-2 ${
               currentPage === page
                 ? "bg-primary text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer"
+                : "cursor-pointer bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
             {page}

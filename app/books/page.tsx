@@ -51,7 +51,7 @@ const BrowseBooksPage = async ({ searchParams }: BrowseBooksPageProps) => {
         </p>
       </div>
 
-      <SearchAndFilter />
+      <SearchAndFilter baseUrl="/books" />
 
       <div className="mx-auto max-w-7xl px-8">
         {books.length > 0 ? (
@@ -69,6 +69,7 @@ const BrowseBooksPage = async ({ searchParams }: BrowseBooksPageProps) => {
                 coverImageUrl={
                   book.coverImageUrl || "/landing/dummy-book-cover.jpg"
                 }
+                detailLink="/books"
               />
             ))}
           </div>
@@ -87,6 +88,7 @@ const BrowseBooksPage = async ({ searchParams }: BrowseBooksPageProps) => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           totalBooks={pagination.totalBooks}
+          baseUrl="/books"
         />
       </div>
 

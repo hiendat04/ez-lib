@@ -7,6 +7,7 @@ export interface BookCardProps {
   totalCopies: number;
   availableCopies: number;
   coverImageUrl: string;
+  detailLink: string;
 }
 
 export interface FeatureSectionCardProps {
@@ -30,6 +31,6 @@ export interface StepCardProps {
 
 export interface FooterSectionProps {
   title: string;
-  
+
   links: string[];
 }
